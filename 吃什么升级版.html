@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>今天吃什么 · 抽签动画版</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+    .card {
+      background: #fff;
+      padding: 28px 24px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      text-align: center;
+      width: 90%;
+      max-width: 360px;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .result {
+      font-size: 26px;
+      font-weight: bold;
+      margin: 18px 0;
+      color: #ff5722;
+      min-height: 36px;
+    }
+    button {
+      background: #ff5722;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+      margin-top: 10px;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .add {
+      background: #607d8b;
+    }
+    .menu {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>今天吃什么？</h1>
+    <div class="result" id="result">点下面开始抽</div>
+
+    <button id="drawBtn" onclick="startDraw()">🎲 开始抽签</button>
+    <button class="add" onclick="addFood()">➕ 新增菜品</button>
+
+    <div class="menu" id="menu"></div>
+  </div>
+
+  <script>
+    let foods = ["麻辣拌", "辣椒炒肉", "米村拌饭", "米饭炒菜"];
+    let timer = null;
+
+    const resultEl = document.getElementById("result");
+    const menuEl = document.getElementById("menu");
+    const drawBtn = document.getElementById("drawBtn");
+
+    function renderMenu() {
+      menuEl.innerHTML = "当前菜单：<br>" + foods.join(" / ");
+    }
+
+    function startDraw() {
+      if (foods.length === 0) {
+        alert("请先添加菜品");
+        return;
+      }
+
+      drawBtn.disabled = true;
+      let count = 0;
+
+      timer = setInterval(() => {
+        const i = Math.floor(Math.random() * foods.length);
+        resultEl.innerText = foods[i];
+        count++;
+
+        if (count > 20) {
+          clearInterval(timer);
+          drawBtn.disabled = false;
+        }
+      }, 100);
+    }
+
+    function addFood() {
+      const name = prompt("输入要新增的菜品名称：");
+      if (name && name.trim()) {
+        foods.push(name.trim());
+        renderMenu();
+      }
+    }
+
+    renderMenu();
+  </script>
+</body>
+</html>
